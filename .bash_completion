@@ -1,0 +1,18 @@
+_django_admin ()
+{
+  local cmd="${1}"
+  # The command that is being executed. This will be the whole path to
+  # the Django admin script, relative to the current working directory.
+
+  local cur=${COMP_WORDS[COMP_CWORD]}
+  # Pointer to current completion word.
+  # By convention, it's named "cur" but this isn't strictly necessary.
+
+  local subcommands=$(django-admin-subcommands.py "$cmd")
+  # The complete list of Django admin subcommands.
+
+  COMPREPLY=($(compgen -W '$subcommands' $cur))
+}
+
+complete -F _django_admin django-admin.py
+complete -F _django_admin manage.py

@@ -182,6 +182,11 @@ function activate() {
   PS1="\n\[$(tput bold)\]\[$(tput setaf 1)\](py:`basename \"$VIRTUAL_ENV\"`) $BASE_PROMPT"
 }
 
+# Command line tools
+function rgrep() {
+  grep -r -n "$1" * --exclude="*~"
+}
+
 # Git
 alias gs='git status'
 alias gd='git diff'

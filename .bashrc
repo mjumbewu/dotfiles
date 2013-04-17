@@ -113,7 +113,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
-export PATH=$PATH:$HOME/.local/bin:$HOME/.rbenv/bin #:$HOME/.rvm/bin
+export PATH=$PATH:$HOME/.local/bin:$HOME/.rvm/bin #:$HOME/.rbenv/bin
 # Whenever displaying the prompt, write the previous line to disk.
 export PROMPT_COMMAND="history -a"
 

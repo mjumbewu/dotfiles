@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cp ~/.bash* .
-cp -r ~/.local .
+cp -r ~/.local/bin .local/

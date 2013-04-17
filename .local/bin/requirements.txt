@@ -1,0 +1,13 @@
+
+##############################
+# Command line extensions
+##############################
+clint  # colors
+pyinotify  # file watching
+
+
+##############################
+# Web development & deployment
+##############################
+dotcloud
+fabric

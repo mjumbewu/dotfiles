@@ -183,8 +183,16 @@ function activate() {
 }
 
 # Command line tools
+
 function rgrep() {
-  grep -r -n "$1" * --exclude="*~"
+  # Recursively grep, excluding gedit temporary files
+  grep -r -n "$1" * --exclude="*~" --exclude-dir=env
+}
+
+function clean() {
+  # Remove gedit temporary files and python compiled files from a folder
+  rm -f `find . -name \*.pyc`
+  rm -f `find . -name \*~`
 }
 
 # Git
@@ -198,3 +206,6 @@ alias gp='git pull; git push'
 
 # Desktop stuff
 alias open='nautilus'
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"

@@ -8,10 +8,18 @@ _django_admin ()
   # Pointer to current completion word.
   # By convention, it's named "cur" but this isn't strictly necessary.
 
-  local subcommands=$(django-admin-subcommands.py "$cmd")
-  # The complete list of Django admin subcommands.
+  if [ "$COMP_CWORD" == "1" ]
+  then
+    local subcommands=$(django-admin-subcommands.py "$cmd")
+    # The complete list of Django admin subcommands.
 
-  COMPREPLY=($(compgen -W '$subcommands' $cur))
+    COMPREPLY=($(compgen -W '$subcommands' $cur))
+  else
+    # Only use the subcommands for the first parameter. The rest should be
+    # from the files.
+    _longopt $*
+  fi
+
 }
 
 complete -F _django_admin django-admin.py

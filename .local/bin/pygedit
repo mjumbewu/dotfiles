@@ -3,6 +3,12 @@
 import sys, os, os.path
 
 sys.path.append('.')
+
+# Define DJANGO_SETTINGS_MODULE because Django packages HATE being imported if
+# it's not defined.
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'pygedit_django_settings'
+
 # Weird hack, __import__("a.b.c") returns module a unless fromlist is non-empty, then it returns module c
 filename = __import__(sys.argv[1], fromlist=["whatever"]).__file__
 

@@ -1,0 +1,66 @@
+#!/usr/bin/env python
+
+import argparse
+import subprocess
+import sys
+import pyinotify
+
+# IN_OPEN, IN_ACCESS, IN_CLOSE_NO_WRITE
+class OnWriteHandler(pyinotify.ProcessEvent):
+    def my_init(self, cwd, extension, cmd):
+        self.cwd = cwd
+        self.extensions = extension.split(',')
+        self.cmd = cmd
+
+    def _run_cmd(self, event_name):
+        print '==> Modification detected (by "%s" event)' % event_name
+        subprocess.call(self.cmd.split(' '), cwd=self.cwd)
+
+    def process_write_event(self, event):
+        if all(not event.pathname.endswith(ext) for ext in self.extensions):
+            return
+
+        event_name = ' '.join(event.maskname.lower().split('_')[1:])
+        self._run_cmd(event_name)
+
+    def ignore_event(self, event):
+        pass
+
+    process_IN_OPEN = ignore_event
+    process_IN_MOVED_TO = ignore_event
+    process_IN_OPEN = ignore_event
+    process_IN_ACCESS = ignore_event
+    process_IN_CLOSE_NOWRITE = ignore_event
+
+    # We want IN_CLOSE_WRITE, but what else?
+    process_default = process_write_event
+
+def auto_compile(path, extension, cmd):
+    wm = pyinotify.WatchManager()
+    handler = OnWriteHandler(cwd=path, extension=extension, cmd=cmd)
+    notifier = pyinotify.Notifier(wm, default_proc_fun=handler)
+    wm.add_watch(path, pyinotify.ALL_EVENTS, rec=True, auto_add=True)
+    print '==> Start monitoring %s (type c^c to exit)' % path
+    notifier.loop()
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=(
+        'Blocks monitoring PATH and its subdirectories for modifications on '
+        'files ending with suffix EXTS. Run CMD each time a modification is '
+        'detected. CMD is optional and defaults to "make".\n'
+        '\n'
+        'Example:\n'
+        '  autocompile /my-latex-document-dir .tex,.bib "make pdf"'))
+    parser.add_argument('path', help='The path to monitor')
+    parser.add_argument('exts', help='A comma-separated list of extensions')
+    parser.add_argument('cmd', help='The command to run when a file changes',
+                        default='make')
+    args = parser.parse_args()
+
+    # Get the arguments
+    path = args.path
+    extension = args.exts
+    cmd = args.cmd
+
+    # Blocks monitoring
+    auto_compile(path, extension, cmd)

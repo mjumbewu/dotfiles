@@ -176,11 +176,11 @@ BASE_PROMPT="\[$(tput bold)\]\[$(tput setaf 2)\]\u@\H \[$(tput setaf 4)\]\w\[$(t
 PS1="\n$BASE_PROMPT"
 
 # Python virtual environment commands
-alias venv='virtualenv env'
 function activate() {
   source $1/bin/activate ;
   PS1="\n\[$(tput bold)\]\[$(tput setaf 1)\](py:`basename \"$VIRTUAL_ENV\"`) $BASE_PROMPT"
 }
+alias venv='virtualenv env; activate env'
 
 # Command line tools
 

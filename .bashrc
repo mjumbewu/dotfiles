@@ -191,8 +191,8 @@ function rgrep() {
 
 function clean() {
   # Remove gedit temporary files and python compiled files from a folder
-  rm -f `find . -name \*.pyc`
-  rm -f `find . -name \*~`
+  find . -name \*.pyc -delete
+  find . -name \*~ -delete
 }
 
 # Git

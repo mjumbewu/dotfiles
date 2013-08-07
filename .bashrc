@@ -172,15 +172,78 @@ function parse_git_branch {
 #BASE_PROMPT="\[$(tput bold)\]\[$(tput setaf 2)\]\u@\H \[$(tput setaf 4)\]\w\[$(tput setaf 3)\] \$(parse_git_branch)\[$(tput sgr0)\]\n\[$(tput bold)\]\[$(tput setaf 1)\]\$(rvm current) \[$(tput sgr0)\]> "
 #PS1="\n$BASE_PROMPT"
 #
-BASE_PROMPT="\[$(tput bold)\]\[$(tput setaf 2)\]\u@\H \[$(tput setaf 4)\]\w\[$(tput setaf 3)\] \$(parse_git_branch)\[$(tput sgr0)\]\n$ "
-PS1="\n$BASE_PROMPT"
+
+function rel_pwd() {
+  # Return the path relative to home. If we're not under the home directory,
+  # we will just get the full path.
+  echo "${PWD/#$HOME/~}"
+}
+
+function venv_pwd() {
+  PWD=$(pwd)
+
+  # If we're not in a virtual environment, just return the normal path.
+  if [[ $VIRTUAL_ENV == "" ]]
+  then
+    echo "$(rel_pwd)"
+    return
+  fi
+
+  # If we're within the virtual environment directory, then return the path
+  # relative to the environment. Otherwise, return the normal path.
+  if [[ $PWD == ${VIRTUAL_ENV}* ]] 
+    then echo "${PWD/#$VIRTUAL_ENV/#}"
+    else echo "$(rel_pwd)"
+  fi
+}
+
+function venv_base() {
+  if [[ $VIRTUAL_ENV != "" ]]
+  then
+    VENV="(py:`basename \"$VIRTUAL_ENV\"`)"
+    echo "${VENV} "
+  else
+    echo ""
+  fi
+}
+
+# Text styles
+BOLD="\[$(tput bold)\]"
+GREEN="\[$(tput setaf 2)\]"
+BLUE="\[$(tput setaf 4)\]"
+YELLOW="\[$(tput setaf 3)\]"
+RED="\[$(tput setaf 1)\]"
+NORMAL="\[$(tput sgr0)\]"
+
+VENV_PS1="\n${BOLD}${RED}\$(venv_base)${GREEN}\u@\H ${BLUE}\$(venv_pwd) ${YELLOW}\$(parse_git_branch)${NORMAL}\n$ "
+PS1=$VENV_PS1
 
 # Python virtual environment commands
-function activate() {
-  source $1/bin/activate ;
-  PS1="\n\[$(tput bold)\]\[$(tput setaf 1)\](py:`basename \"$VIRTUAL_ENV\"`) $BASE_PROMPT"
+function get_venv_dir() {
+  # Use 'env' as the default virtualenv directory name.
+  if [[ $1 == "" ]]
+    then echo "env"
+    else echo "$1"
+  fi
 }
-alias venv='virtualenv env; activate env'
+
+function activate() {
+  if [[ $VIRTUAL_ENV != "" ]]
+    then deactivate
+  fi
+
+  DIR=$(get_venv_dir "$1")
+  source "$DIR/bin/activate" ;
+  PS1=$VENV_PS1
+}
+
+function venv() {
+  DIR=$(get_venv_dir "$1")
+  virtualenv "$DIR"
+  activate "$DIR"
+}
+
+alias cdvenv="cd $VIRTUAL_ENV"
 
 # Command line tools
 

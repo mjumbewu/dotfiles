@@ -192,7 +192,7 @@ function venv_pwd() {
   # If we're within the virtual environment directory, then return the path
   # relative to the environment. Otherwise, return the normal path.
   if [[ $PWD == ${VIRTUAL_ENV}* ]] 
-    then echo "${PWD/#$VIRTUAL_ENV/#}"
+    then echo "${PWD/#$VIRTUAL_ENV/:}"
     else echo "$(rel_pwd)"
   fi
 }
@@ -200,8 +200,7 @@ function venv_pwd() {
 function venv_base() {
   if [[ $VIRTUAL_ENV != "" ]]
   then
-    VENV="(py:`basename \"$VIRTUAL_ENV\"`)"
-    echo "${VENV} "
+    echo "(`basename \"$VIRTUAL_ENV\"`)"
   else
     echo ""
   fi
@@ -215,7 +214,7 @@ YELLOW="\[$(tput setaf 3)\]"
 RED="\[$(tput setaf 1)\]"
 NORMAL="\[$(tput sgr0)\]"
 
-VENV_PS1="\n${BOLD}${RED}\$(venv_base)${GREEN}\u@\H ${BLUE}\$(venv_pwd) ${YELLOW}\$(parse_git_branch)${NORMAL}\n$ "
+VENV_PS1="\n${BOLD}${GREEN}\u@\H ${RED}\$(venv_base) ${BLUE}\$(venv_pwd) ${YELLOW}\$(parse_git_branch)${NORMAL}\n$ "
 PS1=$VENV_PS1
 
 # Python virtual environment commands
@@ -239,7 +238,7 @@ function activate() {
 
 function venv() {
   DIR=$(get_venv_dir "$1")
-  virtualenv "$DIR"
+  virtualenv $@
   activate "$DIR"
 }
 

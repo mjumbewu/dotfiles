@@ -176,7 +176,7 @@ function parse_git_branch {
 function rel_pwd() {
   # Return the path relative to home. If we're not under the home directory,
   # we will just get the full path.
-  echo "${PWD/#$HOME/~}"
+  echo "${PWD/#$HOME/'~'}"
 }
 
 function venv_pwd() {
@@ -277,3 +277,7 @@ alias open='nautilus'
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
+export NODE_PATH=/usr/lib/nodejs:/usr/lib/node_modules:/usr/share/javascript:~/.local/lib/node_modules
+
+# Restore previous session, if exists
+. /etc/profile.d/vte.sh

@@ -192,7 +192,13 @@ function venv_pwd() {
   # If we're within the virtual environment directory, then return the path
   # relative to the environment. Otherwise, return the normal path.
   if [[ $PWD == ${VIRTUAL_ENV}* ]] 
-    then echo "${PWD/#$VIRTUAL_ENV/:}"
+  then
+    echo "${PWD/#$VIRTUAL_ENV/:}"
+    return
+  fi
+
+  if [[ $PWD == $(dirname ${VIRTUAL_ENV})* ]]
+    then echo "${PWD/#$(dirname $VIRTUAL_ENV)/:}"
     else echo "$(rel_pwd)"
   fi
 }
@@ -200,7 +206,7 @@ function venv_pwd() {
 function venv_base() {
   if [[ $VIRTUAL_ENV != "" ]]
   then
-    echo "(`basename \"$VIRTUAL_ENV\"`)"
+    echo "(`basename \"$(dirname $VIRTUAL_ENV)\"`/`basename \"$VIRTUAL_ENV\"`)"
   else
     echo ""
   fi

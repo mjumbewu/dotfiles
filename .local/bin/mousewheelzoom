@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# 1. Check whether ../lib/gnome-shell-mousewheel-zoom/mousewheelzoom exists
+#   a. If not, direct user to download from https://github.com/mjumbewu/gnome-shell-mousewheel-zoom.git
+#   b. If it does exist, run it.

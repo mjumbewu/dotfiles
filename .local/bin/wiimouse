@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# For general instructions, see
+# http://www.winko-erades.nl/index.php?option=com_content&view=article&id=2:use-the-wii
+
+# Requirements:
+# sudo apt-get install libcwiid1 lswm wmgui wminput
+
+
+# First run wmgui and connect your wiimote
+sudo modprobe uinput
+
+echo "Put Wiimotes in discoverable mode now (press 1+2)..."
+
+echo -ne "\r3"
+sleep 1
+echo -ne "\r2"
+sleep 1
+echo -ne "\r1"
+sleep 1
+echo -e "\rScanning..."
+
+# Get the wiimote's MAC address
+WIIMOTE_MAC_ADDRESS=$(lswm)
+echo "This right?"
+echo $WIIMOTE_MAC_ADDRESS
+
+# sudo wminput $WIIMOTE_MAC_ADDRESS

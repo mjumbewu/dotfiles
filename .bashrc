@@ -191,7 +191,7 @@ function venv_pwd() {
 
   # If we're within the virtual environment directory, then return the path
   # relative to the environment. Otherwise, return the normal path.
-  if [[ $PWD == ${VIRTUAL_ENV}* ]] 
+  if [[ $PWD == ${VIRTUAL_ENV}* ]]
   then
     echo "${PWD/#$VIRTUAL_ENV/:}"
     return
@@ -268,6 +268,7 @@ alias gs='git status'
 alias gd='git diff'
 alias ga='git add'
 alias gau='git add -u'
+alias gaw='git diff -w --no-color | git apply --cached --ignore-whitespace'
 alias gc='git commit'
 alias gcm='git commit -m'
 alias gp='git pull; git push'

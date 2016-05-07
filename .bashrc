@@ -276,6 +276,9 @@ alias gp='git pull; git push'
 # Desktop stuff
 alias open='nautilus'
 
+# Copy stdout to the clipboard, excluding any trailing newlines
+alias clip="perl -pe 'chomp if eof' | xclip -sel clip"
+
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 export NODE_PATH=/usr/lib/nodejs:/usr/lib/node_modules:/usr/share/javascript:~/.local/lib/node_modules

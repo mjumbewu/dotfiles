@@ -1,0 +1,10 @@
+export PATH=$PATH:$HOME/.local/bin:$HOME/.rvm/bin #:$HOME/.rbenv/bin
+
+# Whenever displaying the prompt, write the previous line to disk.
+export PROMPT_COMMAND="history -a"
+
+# Load rvm if it exists in the $HOME dir.
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
+# Load rvm if it exists in /usr/local.
+[[ -s "/usr/local/rvm/scripts/rvm" ]] && source "/usr/local/rvm/scripts/rvm"

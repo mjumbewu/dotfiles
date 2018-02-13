@@ -1,0 +1,71 @@
+function parse_git_deleted {
+  [[ $(git status 2> /dev/null | grep deleted:) != "" ]] && echo "-"
+}
+function parse_git_added {
+  [[ $(git status 2> /dev/null | grep "Untracked files:") != "" ]] && echo '+'
+}
+function parse_git_modified {
+  [[ $(git status 2> /dev/null | grep modified:) != "" ]] && echo "*"
+}
+function parse_git_dirty {
+  # [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "☠"
+  echo "$(parse_git_added)$(parse_git_modified)$(parse_git_deleted)"
+}
+function parse_git_branch {
+  echo "$(parse_git_dirty)$(__git_ps1 '%s')"
+}
+
+# Set up the command prompt
+#BASE_PROMPT="\[$(tput bold)\]\[$(tput setaf 2)\]\u@\H \[$(tput setaf 4)\]\w\[$(tput setaf 3)\] \$(parse_git_branch)\[$(tput sgr0)\]\n\[$(tput bold)\]\[$(tput setaf 1)\]\$(rvm current) \[$(tput sgr0)\]> "
+#PS1="\n$BASE_PROMPT"
+#
+
+function rel_pwd() {
+  # Return the path relative to home. If we're not under the home directory,
+  # we will just get the full path.
+  echo "${PWD/#$HOME/'~'}"
+}
+
+function venv_pwd() {
+  PWD=$(pwd)
+
+  # If we're not in a virtual environment, just return the normal path.
+  if [[ $VIRTUAL_ENV == "" ]]
+  then
+    echo "$(rel_pwd)"
+    return
+  fi
+
+  # If we're within the virtual environment directory, then return the path
+  # relative to the environment. Otherwise, return the normal path.
+  if [[ $PWD == ${VIRTUAL_ENV}* ]]
+  then
+    echo "${PWD/#$VIRTUAL_ENV/:}"
+    return
+  fi
+
+  if [[ $PWD == $(dirname ${VIRTUAL_ENV})* ]]
+    then echo "${PWD/#$(dirname $VIRTUAL_ENV)/:}"
+    else echo "$(rel_pwd)"
+  fi
+}
+
+function venv_base() {
+  if [[ $VIRTUAL_ENV != "" ]]
+  then
+    echo "(`basename \"$(dirname $VIRTUAL_ENV)\"`/`basename \"$VIRTUAL_ENV\"`)"
+  else
+    echo ""
+  fi
+}
+
+# Text styles
+BOLD="\[$(tput bold)\]"
+GREEN="\[$(tput setaf 2)\]"
+BLUE="\[$(tput setaf 4)\]"
+YELLOW="\[$(tput setaf 3)\]"
+RED="\[$(tput setaf 1)\]"
+NORMAL="\[$(tput sgr0)\]"
+
+VENV_PS1="\n${BOLD}${GREEN}\u@\H ${RED}\$(venv_base) ${BLUE}\$(venv_pwd) ${YELLOW}\$(parse_git_branch)${NORMAL}\n$ "
+PS1=$VENV_PS1

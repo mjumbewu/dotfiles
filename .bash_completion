@@ -1,3 +1,5 @@
+source ~/.bash_git_completion
+
 _django_admin ()
 {
   local cmd="${1}"

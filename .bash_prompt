@@ -1,3 +1,5 @@
+source ~/.bash_git_prompt
+
 function parse_git_deleted {
   [[ $(git status 2> /dev/null | grep deleted:) != "" ]] && echo "-"
 }

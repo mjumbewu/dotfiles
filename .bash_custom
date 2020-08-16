@@ -11,7 +11,11 @@ export PROMPT_COMMAND="history -a"
 
 # Autocomplete for kubernetes
 source <(kubectl completion bash)
+export KUBE_EDITOR=nano
 
 # Autocomplete for the workon command
 complete -W "$(workon --options-list)" workon
 
+# Android Studio stuff
+export ANDROID_HOME=~/.local/android-sdk
+export PATH=~/.local/android-sdk/platform-tools:~/.local/android-sdk/emulator:~/.local/android-sdk/tools:~/.local/android-sdk/tools/bin:$PATH

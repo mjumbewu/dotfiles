@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+squot="'"
+USAGE='Usage: workon [hsw|...]
+
+You can also install autocomplete by running:
+
+    echo '$squot''$squot' >> ~/.bashrc
+    echo '$squot'#Setup autocomplete for the workon command'$squot' >> ~/.bashrc
+    echo '$squot'complete -W "$(workon --options-list)" workon'$squot' >> ~/.bashrc
+
+Or just:
+
+    workon --install-tabcomplete
+'
+
+case "$1" in
+  "bastion")
+    cd
+    gnome-terminal --window-with-profile=Persistent --title "GCP Port Forwarding" -- /bin/bash -c '
+      kubectl port-forward deploy/source-db-proxy 5438:443
+    '
+    ;;
+
+  "hsw")
+    cd ~/Programming/fixlist/HomeSpunWonderII/
+    gnome-terminal --window-with-profile=Persistent --title "HSW Prompt" -- /bin/bash -c '
+      gnome-terminal --tab-with-profile=Persistent --title "HSW Server"  -- /bin/bash -c "source env/bin/activate; foreman run src/manage.py runserver"
+      gnome-terminal --tab-with-profile=Persistent --title "HSW Scripts" -- /bin/bash -c "npm run watch-scripts"
+      gnome-terminal --tab-with-profile=Persistent --title "HSW Styles"  -- /bin/bash -c "npm run watch-styles"
+      git status
+      /bin/bash
+    '
+    atom .
+    ;;
+
+  "hsw-api")
+    cd ~/Programming/fixlist/fixlist-data-api/
+    gnome-terminal --window-with-profile=Persistent --title "HSW API Prompt" -- /bin/bash -c '
+      gnome-terminal --tab-with-profile=Persistent --title "HSW API Server" -- /bin/bash -c "source env/bin/activate; foreman run src/manage.py runserver 8001"
+      git status
+      /bin/bash
+    '
+    atom .
+    ;;
+
+  "rescuetime")
+    gnome-terminal --window-with-profile="Rescue time" --title "Rescue Time" -- /bin/bash -c 'rescuetime'
+    ;;
+
+  "--install-tabcomplete")
+    echo '' >> ~/.bashrc
+    echo '#Setup autocomplete for the workon command' >> ~/.bashrc
+    echo 'complete -W "$(workon --options-list)" workon' >> ~/.bashrc
+    ;;
+
+  "--options-list")
+    echo "bastion hsw hsw-api rescuetime --install-tabcomplete --options-list"
+    ;;
+
+  *)
+    echo "$USAGE"
+    exit 1
+
+esac

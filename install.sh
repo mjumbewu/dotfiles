@@ -12,6 +12,10 @@ cp $SRCDIR/.bash_aliases $HOME/.bash_aliases
 cp $SRCDIR/.bash_prompt $HOME/.bash_prompt
 cp $SRCDIR/.bash_custom $HOME/.bash_custom
 
+echo "Creating other local config files..."
+cp -r $SRCDIR/.config $HOME/.config
+cp -r $SRCDIR/.local $HOME/.local
+
 
 # Add an reference to .bash_aliases to the .bashrc if it does not yet exist.
 echo "Adding reference to .bash_aliases..."

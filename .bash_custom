@@ -8,3 +8,10 @@ export PROMPT_COMMAND="history -a"
 
 # Load rvm if it exists in /usr/local.
 [[ -s "/usr/local/rvm/scripts/rvm" ]] && source "/usr/local/rvm/scripts/rvm"
+
+# Autocomplete for kubernetes
+source <(kubectl completion bash)
+
+# Autocomplete for the workon command
+complete -W "$(workon --options-list)" workon
+

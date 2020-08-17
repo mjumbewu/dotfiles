@@ -9,12 +9,13 @@ cp "$HOME/.bashrc" "$HOME/.bashrc.$(date -Iseconds)"
 # Move dotfiles into place
 echo "Creating additional .bash files..."
 cp $SRCDIR/.bash_aliases $HOME/.bash_aliases
+cp $SRCDIR/.bash_git_prompt $HOME/.bash_git_prompt
 cp $SRCDIR/.bash_prompt $HOME/.bash_prompt
 cp $SRCDIR/.bash_custom $HOME/.bash_custom
 
 echo "Creating other local config files..."
-cp -r $SRCDIR/.config $HOME/.config
-cp -r $SRCDIR/.local $HOME/.local
+cp -r $SRCDIR/.config $HOME/
+cp -r $SRCDIR/.local $HOME/
 
 
 # Add an reference to .bash_aliases to the .bashrc if it does not yet exist.

@@ -28,7 +28,14 @@ function rel_pwd() {
   echo "${PWD/#$HOME/'~'}"
 }
 
+function rel_path() {
+  BASE_PATH=$1
+  FULL_PATH=$2
+  echo ${FULL_PATH/#$BASE_PATH/}
+}
+
 function venv_pwd() {
+  VENV_ROOT=$HOME/.virtualenvs
   PWD=$(pwd)
 
   # If we're not in a virtual environment, just return the normal path.
@@ -46,8 +53,8 @@ function venv_pwd() {
     return
   fi
 
-  if [[ $PWD == $(dirname ${VIRTUAL_ENV})* ]]
-    then echo "${PWD/#$(dirname $VIRTUAL_ENV)/:}"
+  if [[ ${VENV_ROOT}${PWD} == ${VIRTUAL_ENV}* ]]
+    then echo "${PWD/#$(rel_path $VENV_ROOT $VIRTUAL_ENV)/:}"
     else echo "$(rel_pwd)"
   fi
 }
